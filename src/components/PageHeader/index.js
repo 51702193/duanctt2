@@ -59,7 +59,7 @@ function PageHeader() {
           </div>
         </nav>
       </div>
-      <Modal visible={isSignedIn} onOk={() => {}} onCancel={() => {}}>
+      <Modal visible={false} onOk={() => {}} onCancel={() => {}}>
         <div>Lần đầu đăng nhập</div>
         <div>Xin hãy đăng ký thành viên</div>
       </Modal>
