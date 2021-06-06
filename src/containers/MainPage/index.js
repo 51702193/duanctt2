@@ -1,7 +1,20 @@
 import { Layout, Menu, Dropdown, Button, Row, Col, Carousel } from 'antd';
+import useFetch from "react-fetch-hook";
+
 import './styles.scss';
 
-function MainPage() {
+function MainPage({ BE_API_ROUTE }) {
+    const { isLoading, data } = useFetch(`${BE_API_ROUTE.local}/tintuc`);
+    // const [tintuc, setTinTuc] = useState([]);
+    // const loadData = async () => {
+    //     const fetchData = await fetch(`${BE_API_ROUTE.local}/tintuc`, { mode: 'cors' });
+    //     const data = await fetchData.json();
+    //     setTinTuc(data);
+    // }
+    // useEffect(() => {
+    //     loadData();
+    // }, []);
+
     const { Content } = Layout;
     const dropdownMenu = (
         <Menu>
@@ -168,125 +181,27 @@ function MainPage() {
                 className="dailynews-banner"
             >
                 <div className="dailynews-banner__top">
-
                     <h2 className="title">Bất động sản dành cho bạn</h2>
-
                 </div>
                 <Row gutter={[16, 24]} className="dailynews-banner__body">
-                    <Col className="home-product" span={6}>
-                        <div className="product-thumb ">
-                            <a href="/view-details">
-                                <img className=" ls-is-cached lazyloaded" data-src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" alt="Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng" src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" />
-                            </a>
-                        </div>
-                        <div className="home-product-bound">
-                            <a href="/view-details" className="product-title">Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng</a>
-                            <div className="product-price">8.1 tỷ . 160 m²</div>
-                            <a href="/view-details" className="product-address" title="Cam Ranh Khánh Hòa">Cam Ranh, Khánh Hòa</a>
-                            <div className="product-date">
-                                Hôm nay - 09/05/2021
-                </div>
-                        </div>
-                    </Col>
-                    <Col className="home-product" span={6}>
-                        <div className="product-thumb ">
-                            <a href="/view-details">
-                                <img className=" ls-is-cached lazyloaded" data-src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" alt="Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng" src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" />
-                            </a>
-                        </div>
-                        <div className="home-product-bound">
-                            <a href="/view-details" className="product-title">Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng</a>
-                            <div className="product-price">8.1 tỷ . 160 m²</div>
-                            <a href="/view-details" className="product-address" title="Cam Ranh Khánh Hòa">Cam Ranh, Khánh Hòa</a>
-                            <div className="product-date">
-                                Hôm nay - 09/05/2021
-                </div>
-                        </div>
-                    </Col><Col className="home-product" span={6}>
-                        <div className="product-thumb ">
-                            <a href="/view-details">
-                                <img className=" ls-is-cached lazyloaded" data-src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" alt="Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng" src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" />
-                            </a>
-                        </div>
-                        <div className="home-product-bound">
-                            <a href="/view-details" className="product-title">Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng</a>
-                            <div className="product-price">8.1 tỷ . 160 m²</div>
-                            <a href="/view-details" className="product-address" title="Cam Ranh Khánh Hòa">Cam Ranh, Khánh Hòa</a>
-                            <div className="product-date">
-                                Hôm nay - 09/05/2021
-                </div>
-                        </div>
-                    </Col><Col className="home-product" span={6}>
-                        <div className="product-thumb ">
-                            <a href="/view-details">
-                                <img className=" ls-is-cached lazyloaded" data-src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" alt="Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng" src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" />
-                            </a>
-                        </div>
-                        <div className="home-product-bound">
-                            <a href="/view-details" className="product-title">Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng</a>
-                            <div className="product-price">8.1 tỷ . 160 m²</div>
-                            <a href="/view-details" className="product-address" title="Cam Ranh Khánh Hòa">Cam Ranh, Khánh Hòa</a>
-                            <div className="product-date">
-                                Hôm nay - 09/05/2021
-                </div>
-                        </div>
-                    </Col><Col className="home-product" span={6}>
-                        <div className="product-thumb ">
-                            <a href="/view-details">
-                                <img className=" ls-is-cached lazyloaded" data-src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" alt="Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng" src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" />
-                            </a>
-                        </div>
-                        <div className="home-product-bound">
-                            <a href="/view-details" className="product-title">Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng</a>
-                            <div className="product-price">8.1 tỷ . 160 m²</div>
-                            <a href="/view-details" className="product-address" title="Cam Ranh Khánh Hòa">Cam Ranh, Khánh Hòa</a>
-                            <div className="product-date">
-                                Hôm nay - 09/05/2021
-                </div>
-                        </div>
-                    </Col><Col className="home-product" span={6}>
-                        <div className="product-thumb ">
-                            <a href="/view-details">
-                                <img className=" ls-is-cached lazyloaded" data-src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" alt="Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng" src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" />
-                            </a>
-                        </div>
-                        <div className="home-product-bound">
-                            <a href="/view-details" className="product-title">Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng</a>
-                            <div className="product-price">8.1 tỷ . 160 m²</div>
-                            <a href="/view-details" className="product-address" title="Cam Ranh Khánh Hòa">Cam Ranh, Khánh Hòa</a>
-                            <div className="product-date">
-                                Hôm nay - 09/05/2021
-                </div>
-                        </div>
-                    </Col><Col className="home-product" span={6}>
-                        <div className="product-thumb ">
-                            <a href="/view-details">
-                                <img className=" ls-is-cached lazyloaded" data-src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" alt="Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng" src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" />
-                            </a>
-                        </div>
-                        <div className="home-product-bound">
-                            <a href="/view-details" className="product-title">Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng</a>
-                            <div className="product-price">8.1 tỷ . 160 m²</div>
-                            <a href="/view-details" className="product-address" title="Cam Ranh Khánh Hòa">Cam Ranh, Khánh Hòa</a>
-                            <div className="product-date">
-                                Hôm nay - 09/05/2021
-                </div>
-                        </div>
-                    </Col><Col className="home-product" span={6}>
-                        <div className="product-thumb ">
-                            <a href="/view-details">
-                                <img className=" ls-is-cached lazyloaded" data-src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" alt="Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng" src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" />
-                            </a>
-                        </div>
-                        <div className="home-product-bound">
-                            <a href="/view-details" className="product-title">Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng</a>
-                            <div className="product-price">8.1 tỷ . 160 m²</div>
-                            <a href="/view-details" className="product-address" title="Cam Ranh Khánh Hòa">Cam Ranh, Khánh Hòa</a>
-                            <div className="product-date">
-                                Hôm nay - 09/05/2021
-                </div>
-                        </div>
-                    </Col>
+                    {!data ? <div style={{ fontSize: '25px', fontWeight: 600 }}>Hiện không có tin tức</div> : data.map(tintuc => {
+                        const ViewDetailsUrl = `/view-details/${tintuc.id}`
+                        return (
+                            <Col className="home-product" span={6} key={tintuc.id}>
+                                <div className="product-thumb ">
+                                    <a href={ViewDetailsUrl}>
+                                        <img className=" ls-is-cached lazyloaded" data-src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" alt="Bán nhà phố 3 tầng, biển Bãi Dài Nha Trang, sổ hồng lâu dài, thanh toán 1 lần hoặc trả 1%/1 tháng" src="https://file4.batdongsan.com.vn/crop/257x147/2020/12/16/20201216114223-8f4b_wm.jpg" />
+                                    </a>
+                                </div>
+                                <div className="home-product-bound">
+                                    <a href={ViewDetailsUrl} className="product-title">{tintuc.tenduan}</a>
+                                    <div className="product-price">{tintuc.dientich}</div>
+                                    <a href="/" className="product-address">{tintuc.vitri}</a>
+                                    <div className="product-date">{new Date(tintuc.created_at).toString()}</div>
+                                </div>
+                            </Col>
+                        )
+                    })}
                 </Row>
             </div>
         </Content >

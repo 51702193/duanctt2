@@ -1,24 +1,21 @@
-
 import { Carousel } from 'antd';
-import dummy from 'data/duan.json';
+import useFetch from "react-fetch-hook";
+import { useParams } from "react-router-dom";
+
 import anhduan from 'data/Recidence.png';
 import anhduan2 from 'data/Recidence2.png';
-import { useEffect, useState } from 'react';
+
+
 import './styles.scss';
 
-const ViewDetails = () => {
-    const [duan, setDuAn] = useState(dummy[0]);
-    const loadData = async () => {
-        const fetchData = await fetch("https://duancntt2-be.herokuapp.com/api/home",{mode: 'cors'});
-        const data = await fetchData.json();
-        console.log("fetch completed", data);
-        setDuAn(data[0]);
+const ViewDetails = ({ BE_API_ROUTE }) => {
+    let { id } = useParams();
+    const { isLoading, data } = useFetch(`${BE_API_ROUTE.local}/tintuc/${id}`);
+
+    if(isLoading){
+        return <></>;
     }
-    useEffect(() => {
-        // "https://duancntt2-be.herokuapp.com/api/home"
-        loadData();
-    },[]);
-    
+
     return (
         <div className="view-details-page">
             <Carousel className="carousel-container" autoplay >
@@ -31,44 +28,44 @@ const ViewDetails = () => {
                         <div class="col-xl-8 ">
                             <ul class="list-xl">
                                 <li>
-                                    <h1 style={{ textAlign: 'center', marginBottom: 20 }}>Dự án {duan.tenduan}</h1>
+                                    <h1 style={{ textAlign: 'center', marginBottom: 20 }}>Dự án {data.tenduan}</h1>
                                     <div className="container-detail">
-                                        <div className="detail-title">Tên dự án</div><p>{duan.tenduan}</p>
+                                        <div className="detail-title">Tên dự án</div><p>{data.tenduan}</p>
                                     </div>
                                     <div className="container-detail">
-                                        <div className="detail-title">Vị trí</div><p>{duan.vitri}</p>
+                                        <div className="detail-title">Vị trí</div><p>{data.vitri}</p>
                                     </div>
                                     <div className="container-detail">
-                                        <div className="detail-title">Chủ đầu tư</div><p>{duan.chudautu}</p>
+                                        <div className="detail-title">Chủ đầu tư</div><p>{data.chudautu}</p>
                                     </div>
                                     <div className="container-detail">
-                                        <div className="detail-title">Đơn vị phát triển dự án</div><p>{duan.donviphattrien}</p>
+                                        <div className="detail-title">Đơn vị phát triển dự án</div><p>{data.donviphattrien}</p>
                                     </div>
                                     <div className="container-detail">
-                                        <div className="detail-title">Loại hình sản phẩm</div><p>{duan.loaihinhsanpham}</p>
+                                        <div className="detail-title">Loại hình sản phẩm</div><p>{data.loaihinhsanpham}</p>
                                     </div>
                                     <div className="container-detail">
-                                        <div className="detail-title">Tổng diện tích</div><p>{duan.tongdientich}</p>
+                                        <div className="detail-title">Tổng diện tích</div><p>{data.tongdientich}</p>
                                     </div>
                                     <div className="container-detail">
-                                        <div className="detail-title">Mật độ đất ở chiếm</div><p>{duan.matdodato}</p>
+                                        <div className="detail-title">Mật độ đất ở chiếm</div><p>{data.matdodato}</p>
                                     </div>
                                     <div className="container-detail">
-                                        <div className="detail-title">Tiện ích công cộng</div><p>{duan.tienichcongcong}</p>
+                                        <div className="detail-title">Tiện ích công cộng</div><p>{data.tienichcongcong}</p>
                                     </div>
                                     <div className="container-detail">
-                                        <div className="detail-title">Bao gồm</div><p>{duan.baogom}</p>
+                                        <div className="detail-title">Bao gồm</div><p>{data.baogom}</p>
                                     </div>
                                     <div className="container-detail">
-                                        <div className="detail-title">Diện tích</div><p>{duan.dientich}</p>
+                                        <div className="detail-title">Diện tích</div><p>{data.dientich}</p>
                                     </div>
                                     <div className="container-detail">
-                                        <div className="detail-title">Giá bán</div><p>{duan.giaban}</p>
+                                        <div className="detail-title">Giá bán</div><p>{data.giaban}</p>
                                     </div>
                                 </li>
                                 <li>
                                     <div style={{ fontSize: 25, color: 'black', fontWeight: 600 }}>Mô tả</div>
-                                    <span style={{whiteSpace: 'pre-line'}}>{duan.mota}</span>
+                                    <span style={{ whiteSpace: 'pre-line' }}>{data.mota}</span>
                                 </li>
                             </ul>
                         </div>
