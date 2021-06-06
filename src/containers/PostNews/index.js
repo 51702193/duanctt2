@@ -26,7 +26,7 @@ const validateMessages = {
 const PostNews = () => {
     const onFinish = (values) => {
         console.log(values);
-        fetch(`${BE_API_ROUTE.local}/tintuc`, {
+        fetch(`${BE_API_ROUTE.heroku}/tintuc`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

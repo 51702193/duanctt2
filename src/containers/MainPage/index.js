@@ -4,16 +4,7 @@ import useFetch from "react-fetch-hook";
 import './styles.scss';
 
 function MainPage({ BE_API_ROUTE }) {
-    const { isLoading, data } = useFetch(`${BE_API_ROUTE.local}/tintuc`);
-    // const [tintuc, setTinTuc] = useState([]);
-    // const loadData = async () => {
-    //     const fetchData = await fetch(`${BE_API_ROUTE.local}/tintuc`, { mode: 'cors' });
-    //     const data = await fetchData.json();
-    //     setTinTuc(data);
-    // }
-    // useEffect(() => {
-    //     loadData();
-    // }, []);
+    const { isLoading, data } = useFetch(`${BE_API_ROUTE.heroku}/tintuc`);
 
     const { Content } = Layout;
     const dropdownMenu = (

@@ -10,7 +10,7 @@ import './styles.scss';
 
 const ViewDetails = ({ BE_API_ROUTE }) => {
     let { id } = useParams();
-    const { isLoading, data } = useFetch(`${BE_API_ROUTE.local}/tintuc/${id}`);
+    const { isLoading, data } = useFetch(`${BE_API_ROUTE.heroku}/tintuc/${id}`);
 
     if(isLoading){
         return <></>;
