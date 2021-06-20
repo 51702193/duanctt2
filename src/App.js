@@ -21,7 +21,6 @@ import { BE_API_ROUTE } from 'constants/app';
 
 function AppContainer() {
   const googleAuth = useGoogleAuth();
-  console.log("🚀 ~ file: index.js ~ line 15 ~ PageHeader ~ googleUser", googleAuth);
   // fetch(`${BE_API_ROUTE.local}/user/authenticate`, {
   //   method: 'POST',
   //   headers: {

@@ -1,31 +1,64 @@
-import { Layout, Menu, Dropdown, Button, Row, Col, Carousel } from 'antd';
+import { Layout, Menu, Dropdown, Button, Row, Col, Carousel, Spin } from 'antd';
+import { useEffect, useState } from 'react';
 import useFetch from "react-fetch-hook";
 
 import './styles.scss';
-
+const { Content } = Layout;
 function MainPage({ BE_API_ROUTE }) {
     const { isLoading, data } = useFetch(`${BE_API_ROUTE.heroku}/tintuc`);
+    const locationFetch = useFetch(`${BE_API_ROUTE.heroku}/location`);
+    const [province, setProvice] = useState(null);
+    const [district, setDistrict] = useState(null);
 
-    const { Content } = Layout;
-    const dropdownMenu = (
-        <Menu>
-            <Menu.Item disabled={true}>
-                <a href="/view-details" className>
-                    1st menu item
-        </a>
-            </Menu.Item>
-            <Menu.Item disabled={true}>
-                <a href="/view-details" className>
-                    2nd menu item
-        </a>
-            </Menu.Item>
-            <Menu.Item disabled={true}>
-                <a href="/view-details" className>
-                    3rd menu item
-        </a>
-            </Menu.Item>
-        </Menu>
-    );
+    const dropdownProvinceMenu = () => (
+        <Menu style={{
+            maxHeight: 250,
+            overflow: "auto"
+        }}>
+            {
+                (locationFetch.data || []).map(d => <Menu.Item disabled={false} onClick={() => setProvice(d)}>
+                    {d.name}
+                </Menu.Item>)
+            }
+        </Menu>);
+
+    const dropdownDistrictMenu = () => (
+        <Menu style={{
+            maxHeight: 250,
+            overflow: "auto"
+        }}>
+            {
+                (province?.districts || []).map(d => <Menu.Item disabled={false} onClick={() => setDistrict(d)}>
+                    {d.name}
+                </Menu.Item>)
+            }
+        </Menu>);
+
+    // const [province, setProvice] = useState(null);
+    // const provincesFetch = useFetch(`${BE_API_ROUTE.local}/location/provinces`);
+    // const [district, setDistrict] = useState([]);
+    // let districtFetch = [];
+    // const doDistrict = () => {
+    //     districtFetch = useFetch(`${BE_API_ROUTE.local}/location/districts/${province?.Id}`);
+    // }
+
+    // const { Content } = Layout;
+    // const dropdownProvinceMenu = (dropdownData) => (
+    //     <Menu>
+    //         {
+    //             dropdownData.map(d => <Menu.Item disabled={false} onClick={() => setProvice(d)}>
+    //                 {d.name}
+    //             </Menu.Item>)
+    //         }
+    //     </Menu>);
+    // const dropdownDistrictMenu = (dropdownData) => (
+    //     <Menu>
+    //         {
+    //             dropdownData.map(d => <Menu.Item disabled={false} onClick={() => setDistrict(d)}>
+    //                 {d.name}
+    //             </Menu.Item>)
+    //         }
+    //     </Menu>);
     return (
         <Content>
             <div className="home-banner" style={{ position: 'relative' }}>
@@ -40,9 +73,9 @@ function MainPage({ BE_API_ROUTE }) {
                                 fontWeight: '400',
                                 lineHeight: '20px',
                                 color: '#707070',
-                            }}>Hình thức</div>
-                            <Dropdown overlay={dropdownMenu} placement="bottomCenter">
-                                <Button>Chọn hình thức</Button>
+                            }}>Tỉnh</div>
+                            <Dropdown overlay={dropdownProvinceMenu()} placement="bottomCenter">
+                                {locationFetch.isLoading ? <Spin /> : <Button>{province?.name || "Chọn Tỉnh"}</Button>}
                             </Dropdown>
                         </div>
                     </Col>
@@ -53,13 +86,13 @@ function MainPage({ BE_API_ROUTE }) {
                                 fontWeight: '400',
                                 lineHeight: '20px',
                                 color: '#707070',
-                            }}>Loại</div>
-                            <Dropdown overlay={dropdownMenu} placement="bottomCenter">
-                                <Button>Chọn Loại</Button>
+                            }}>Quận</div>
+                            <Dropdown overlay={dropdownDistrictMenu()} placement="bottomCenter" disabled={province == null}>
+                                {locationFetch.isLoading ? <Spin /> : <Button>{district?.name || "Chọn Tỉnh"}</Button>}
                             </Dropdown>
                         </div>
                     </Col>
-                    <Col span={6}>
+                    {/* <Col span={6}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <div style={{
                                 fontSize: '13px',
@@ -84,7 +117,7 @@ function MainPage({ BE_API_ROUTE }) {
                                 <Button>Chọn Quận/Huyện</Button>
                             </Dropdown>
                         </div>
-                    </Col>
+                    </Col> */}
                 </Row>
 
                 {/* <div className="search-banner" style={{
