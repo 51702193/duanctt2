@@ -1,64 +1,45 @@
-import { Layout, Menu, Dropdown, Button, Row, Col, Carousel, Spin } from 'antd';
-import { useEffect, useState } from 'react';
+import { Layout, Row, Col, Carousel, Select } from 'antd';
+import { memo, useEffect, useState } from 'react';
 import useFetch from "react-fetch-hook";
 
+import { useDispatch, useSelector } from 'react-redux';
+import { callProvinces, callDistricts, callStreets, callWards } from 'redux/actions/mainPage'
+import { getDistrictsmainPage, getProvincesmainPage, getStreetsmainPage, getWardsmainPage } from 'redux/selectors'
+
 import './styles.scss';
+
 const { Content } = Layout;
-function MainPage({ BE_API_ROUTE }) {
-    const { isLoading, data } = useFetch(`${BE_API_ROUTE.heroku}/tintuc`);
-    const locationFetch = useFetch(`${BE_API_ROUTE.heroku}/location`);
-    const [province, setProvice] = useState(null);
-    const [district, setDistrict] = useState(null);
+const { Option } = Select;
 
-    const dropdownProvinceMenu = () => (
-        <Menu style={{
-            maxHeight: 250,
-            overflow: "auto"
-        }}>
-            {
-                (locationFetch.data || []).map(d => <Menu.Item disabled={false} onClick={() => setProvice(d)}>
-                    {d.name}
-                </Menu.Item>)
-            }
-        </Menu>);
 
-    const dropdownDistrictMenu = () => (
-        <Menu style={{
-            maxHeight: 250,
-            overflow: "auto"
-        }}>
-            {
-                (province?.districts || []).map(d => <Menu.Item disabled={false} onClick={() => setDistrict(d)}>
-                    {d.name}
-                </Menu.Item>)
-            }
-        </Menu>);
+function MainPage({ BE_API_DEFAULT_ROUTE }) {
+    const dispatch = useDispatch()
 
-    // const [province, setProvice] = useState(null);
-    // const provincesFetch = useFetch(`${BE_API_ROUTE.local}/location/provinces`);
-    // const [district, setDistrict] = useState([]);
-    // let districtFetch = [];
-    // const doDistrict = () => {
-    //     districtFetch = useFetch(`${BE_API_ROUTE.local}/location/districts/${province?.Id}`);
-    // }
+    useEffect(() => {
+        dispatch(callProvinces())
+    }, [])
 
-    // const { Content } = Layout;
-    // const dropdownProvinceMenu = (dropdownData) => (
-    //     <Menu>
-    //         {
-    //             dropdownData.map(d => <Menu.Item disabled={false} onClick={() => setProvice(d)}>
-    //                 {d.name}
-    //             </Menu.Item>)
-    //         }
-    //     </Menu>);
-    // const dropdownDistrictMenu = (dropdownData) => (
-    //     <Menu>
-    //         {
-    //             dropdownData.map(d => <Menu.Item disabled={false} onClick={() => setDistrict(d)}>
-    //                 {d.name}
-    //             </Menu.Item>)
-    //         }
-    //     </Menu>);
+    const districts = useSelector(getDistrictsmainPage);
+    const provinces = useSelector(getProvincesmainPage);
+    const streets = useSelector(getStreetsmainPage);
+    const wards = useSelector(getWardsmainPage);
+
+    const [curPorvince, setCurProvice] = useState(null);
+    const [curDistrict, setCurDistrict] = useState(null);
+
+    const handleSetProvince = provice => {
+        setCurProvice(provice)
+        dispatch(callDistricts(provice))
+    }
+
+    const handleSetDistrict = district => {
+        setCurDistrict(district)
+        dispatch(callStreets(district))
+        dispatch(callWards(district))
+    }
+
+    const { isLoading, data } = useFetch(`${BE_API_DEFAULT_ROUTE}/tintuc/top`);
+
     return (
         <Content>
             <div className="home-banner" style={{ position: 'relative' }}>
@@ -67,76 +48,38 @@ function MainPage({ BE_API_ROUTE }) {
                     position: 'absolute', left: '25%', bottom: '10%', width: '80vh', backgroundColor: 'white', padding: '20px 0px', borderRadius: '20px'
                 }} className="search-banner">
                     <Col span={6}>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <div style={{
-                                fontSize: '13px',
-                                fontWeight: '400',
-                                lineHeight: '20px',
-                                color: '#707070',
-                            }}>Tỉnh</div>
-                            <Dropdown overlay={dropdownProvinceMenu()} placement="bottomCenter">
-                                {locationFetch.isLoading ? <Spin /> : <Button>{province?.name || "Chọn Tỉnh"}</Button>}
-                            </Dropdown>
+                        <div className="container">
+                            <div className="title">Tỉnh</div>
+                            <Select placeholder="Chọn Tỉnh" onChange={handleSetProvince}>
+                                {provinces.map(province => <Option key={province.code} value={province.code}>{province.name}</Option>)}
+                            </Select>
                         </div>
                     </Col>
                     <Col span={6}>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <div style={{
-                                fontSize: '13px',
-                                fontWeight: '400',
-                                lineHeight: '20px',
-                                color: '#707070',
-                            }}>Quận</div>
-                            <Dropdown overlay={dropdownDistrictMenu()} placement="bottomCenter" disabled={province == null}>
-                                {locationFetch.isLoading ? <Spin /> : <Button>{district?.name || "Chọn Tỉnh"}</Button>}
-                            </Dropdown>
-                        </div>
-                    </Col>
-                    {/* <Col span={6}>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <div style={{
-                                fontSize: '13px',
-                                fontWeight: '400',
-                                lineHeight: '20px',
-                                color: '#707070',
-                            }}>Tỉnh/Thành phố</div>
-                            <Dropdown overlay={dropdownMenu} placement="bottomCenter">
-                                <Button>Chọn Tỉnh/Thành phố</Button>
-                            </Dropdown>
+                        <div className="container">
+                            <div className="title">Quận</div>
+                            <Select placeholder="Chọn Quận" onChange={handleSetDistrict} disabled={curPorvince === null}>
+                                {districts.map(district => <Option key={district.id} value={district.id}>{district.name}</Option>)}
+                            </Select>
                         </div>
                     </Col>
                     <Col span={6}>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <div style={{
-                                fontSize: '13px',
-                                fontWeight: '400',
-                                lineHeight: '20px',
-                                color: '#707070',
-                            }}>Quận/Huyện</div>
-                            <Dropdown overlay={dropdownMenu} placement="bottomCenter">
-                                <Button>Chọn Quận/Huyện</Button>
-                            </Dropdown>
+                        <div className="container">
+                            <div className="title">Phường - Xã</div>
+                            <Select placeholder="Chọn Phường - Xã" disabled={curDistrict === null}>
+                                {wards.map(ward => <Option key={ward.id} value={ward.id}>{ward.name}</Option>)}
+                            </Select>
                         </div>
-                    </Col> */}
+                    </Col>
+                    <Col span={6}>
+                        <div className="container">
+                            <div className="title">Đường - Phố</div>
+                            <Select placeholder="Chọn Đường - Phố" disabled={curDistrict === null}>
+                                {streets.map(streets => <Option key={streets.id} value={streets.id}>{streets.name}</Option>)}
+                            </Select>
+                        </div>
+                    </Col>
                 </Row>
-
-                {/* <div className="search-banner" style={{
-            position: 'absolute', left: '25%', bottom: '10%', width: '80vh', height: '100px', backgroundColor: 'white', display: 'flex'
-          }}>
-            < div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div>Hình thức</div>
-              <Dropdown overlay={dropdownMenu} placement="bottomCenter">
-                <Button>Chọn hình thức</Button>
-              </Dropdown>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div>Hình thức</div>
-              <Dropdown overlay={dropdownMenu} placement="bottomCenter">
-                <Button>Chọn hình thức</Button>
-              </Dropdown>
-            </div>
-          </div> */}
-
             </div>
 
             <div className="hot-news">
@@ -221,7 +164,7 @@ function MainPage({ BE_API_ROUTE }) {
                                     <a href={ViewDetailsUrl} className="product-title">{tintuc.tenduan}</a>
                                     <div className="product-price">{tintuc.dientich}</div>
                                     <a href="/" className="product-address">{tintuc.vitri}</a>
-                                    <div className="product-date">{new Date(tintuc.created_at).toString()}</div>
+                                    <div className="product-date">{tintuc.created_date}</div>
                                 </div>
                             </Col>
                         )
@@ -232,7 +175,7 @@ function MainPage({ BE_API_ROUTE }) {
     );
 }
 
-export default MainPage;
+export default memo(MainPage);
 
 
 

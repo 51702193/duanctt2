@@ -1,8 +1,11 @@
 
-import { Form, Input, InputNumber, Button, Select } from 'antd';
-import './styles.scss'
-import { BE_API_ROUTE } from 'constants/app';
+import { Form, Input, Button, Select } from 'antd';
+import { memo, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { callDistricts, callProvinces, callStreets, callWards } from 'redux/actions/postNews'
+import { getDistrictsPostNews, getProvincesPostNews, getStreetsPostNews, getWardsPostNews } from 'redux/selectors'
 
+import './styles.scss'
 const { Option } = Select;
 
 const layout = {
@@ -23,10 +26,35 @@ const validateMessages = {
 };
 /* eslint-enable no-template-curly-in-string */
 
-const PostNews = () => {
+const PostNews = ({ BE_API_DEFAULT_ROUTE }) => {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(callProvinces())
+    }, [])
+
+    const districts = useSelector(getDistrictsPostNews);
+    const provinces = useSelector(getProvincesPostNews);
+    const streets = useSelector(getStreetsPostNews);
+    const wards = useSelector(getWardsPostNews);
+
+    const [curPorvince, setCurProvice] = useState(null);
+    const [curDistrict, setCurDistrict] = useState(null);
+
+    const handleSetProvince = provice => {
+        setCurProvice(provice)
+        dispatch(callDistricts(provice))
+    }
+
+    const handleSetDistrict = district => {
+        setCurDistrict(district)
+        dispatch(callStreets(district))
+        dispatch(callWards(district))
+    }
+
     const onFinish = (values) => {
-        console.log(values);
-        fetch(`${BE_API_ROUTE.heroku}/tintuc`, {
+        console.log(`${BE_API_DEFAULT_ROUTE}/tintuc`)
+        fetch(`${BE_API_DEFAULT_ROUTE}/tintuc`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -35,6 +63,8 @@ const PostNews = () => {
             body: JSON.stringify(values.information1)
         })
     };
+
+   
 
     return (
         <Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
@@ -46,8 +76,25 @@ const PostNews = () => {
                     <Form.Item name={['information1', 'tenduan']} label="Tên Dự Án" rules={[{ required: true }]}>
                         <Input />
                     </Form.Item>
-                    <Form.Item name={['information1', 'vitri']} label="Vị Trí" rules={[{ required: true }]}>
-                        <Input />
+                    <Form.Item name={['information1', 'provinceCode']} label="Tỉnh" rules={[{ required: true }]}>
+                        <Select placeholder="Chọn Tỉnh" onChange={handleSetProvince}>
+                            {provinces.map(province => <Option key={province.code} value={province.code}>{province.name}</Option>)}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item name={['information1', 'districtId']} label="Quận" rules={[{ required: true }]}>
+                        <Select placeholder="Chọn Quận" onChange={handleSetDistrict} disabled={curPorvince === null}>
+                            {districts.map(district => <Option key={district.id} value={district.id}>{district.name}</Option>)}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item name={['information1', 'streetsId']} label="Đường - Phố" rules={[{ required: true }]}>
+                        <Select placeholder="Chọn Đường - Phố" disabled={curDistrict === null}>
+                            {streets.map(streets => <Option key={streets.id} value={streets.id}>{streets.name}</Option>)}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item name={['information1', 'wardId']} label="Phường - Xã" rules={[{ required: true }]}>
+                        <Select placeholder="Chọn Phường - Xã" disabled={curDistrict === null}>
+                            {wards.map(ward => <Option key={ward.id} value={ward.id}>{ward.name}</Option>)}
+                        </Select>
                     </Form.Item>
                     <Form.Item name={['information1', 'chudautu']} label="Chủ đầu tư" rules={[{ required: true }]}>
                         <Input />

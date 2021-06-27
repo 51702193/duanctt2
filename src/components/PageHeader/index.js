@@ -3,7 +3,7 @@ import "antd/dist/antd.css";
 import { Modal } from 'antd';
 import { useSelector } from 'react-redux'
 
-import { getUserOauth2 } from 'redux/selectors/app'
+import { getUserOauth2 } from 'redux/selectors'
 
 import GoogleSignInButton from 'components/GoogleSignInOutButton';
 
@@ -14,7 +14,6 @@ import images1 from 'images/logo-default-151x44.png';
 
 function PageHeader() {
   const user = useSelector(getUserOauth2)
-  console.log("🚀 ~ file: index.js ~ line 17 ~ PageHeader ~ user", user)
 
   return (
     <>
@@ -42,7 +41,7 @@ function PageHeader() {
                     <div className="unit-left"><span className="icon novi-icon icon-md icon-modern mdi mdi-map-marker"></span></div>
                     <div className="unit-body"><a className="link-default" >2130 Fulton Street <br></br> San Diego, CA 94117-1080</a></div>
                   </article>
-                  {user.accessToken ? <><div>Welcome, {user.Et.Ue}</div> <GoogleSignInButton /></> : <GoogleSignInButton />}
+                  {user?.accessToken ? <><div>Welcome, {user.ct.Ue}</div> <GoogleSignInButton /></> : <GoogleSignInButton />}
                 </div>
               </div>
             </div>

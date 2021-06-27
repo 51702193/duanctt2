@@ -8,11 +8,11 @@ import anhduan2 from 'data/Recidence2.png';
 
 import './styles.scss';
 
-const ViewDetails = ({ BE_API_ROUTE }) => {
+const ViewDetails = ({ BE_API_DEFAULT_ROUTE }) => {
     let { id } = useParams();
-    const { isLoading, data } = useFetch(`${BE_API_ROUTE.heroku}/tintuc/${id}`);
+    const { isLoading, data } = useFetch(`${BE_API_DEFAULT_ROUTE}/tintuc/${id}`);
 
-    if(isLoading){
+    if(isLoading || !data){
         return <></>;
     }
 
@@ -33,7 +33,7 @@ const ViewDetails = ({ BE_API_ROUTE }) => {
                                         <div className="detail-title">Tên dự án</div><p>{data.tenduan}</p>
                                     </div>
                                     <div className="container-detail">
-                                        <div className="detail-title">Vị trí</div><p>{data.vitri}</p>
+                                        <div className="detail-title">Vị trí</div><p>{`${data.rProvince.name}, ${data.rDistrict.name},${data.rStreet?.prefix} ${data.rStreet?.name}, ${data.rWard.prefix} ${data.rWard.name}`}</p>
                                     </div>
                                     <div className="container-detail">
                                         <div className="detail-title">Chủ đầu tư</div><p>{data.chudautu}</p>

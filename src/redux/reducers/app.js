@@ -1,7 +1,9 @@
 import { USER_LOGIN, USER_LOGOUT } from "redux/actionTypes";
+import { useGoogleAuth } from 'components/GoogleAuth';
 
 const initialState = {
-    user: {}
+    user: {},
+    error: undefined
 };
 
 const appReducer = (state = initialState, action) => {

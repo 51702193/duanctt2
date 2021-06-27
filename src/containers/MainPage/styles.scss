@@ -1,3 +1,20 @@
+.home-banner {
+    .search-banner {
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+            .title {
+                font-size: 13px;
+                font-weight: 400;
+                line-height: 20px;
+                color: #707070;
+            }
+        }
+    }
+}
+
 .ant-row-rtl #components-layout-demo-top-side-2 .logo {
     float: right;
     margin: 16px 0 16px 24px;
