@@ -11,16 +11,21 @@ import './styles.scss';
 const ViewDetails = ({ BE_API_DEFAULT_ROUTE }) => {
     let { id } = useParams();
     const { isLoading, data } = useFetch(`${BE_API_DEFAULT_ROUTE}/tintuc/${id}`);
+    console.log("🚀 ~ file: index.js ~ line 14 ~ ViewDetails ~ data", data)
 
-    if(isLoading || !data){
-        return <></>;
+    if (isLoading) {
+        return <>Loading</>;
+    }
+    if (!data) {
+        return <>Not Found</>;
     }
 
     return (
         <div className="view-details-page">
             <Carousel className="carousel-container" autoplay >
-                <img className="image-carousel" src={anhduan}></img>
-                <img className="image-carousel" src={anhduan2}></img>
+                {data.images.split(',').map(i => (
+                    <img key={i} alt="img" className="image-carousel" src={`${BE_API_DEFAULT_ROUTE}/file/download/${i}`}></img>
+                ))}
             </Carousel>
             <section class="section novi-background section-sm section-first">
                 <div class="container">

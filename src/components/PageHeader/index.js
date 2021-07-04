@@ -54,7 +54,9 @@ function PageHeader() {
                   </li>
                   <li className="rd-nav-item"><a className="rd-nav-link" href='/dang-tin'>Đăng tin tức</a>
                   </li>
-                  <li className="rd-nav-item"><a className="rd-nav-link" href='/view-details'>Thông tin chi tiết</a>
+                  <li className="rd-nav-item"><a className="rd-nav-link" href='/view-all'>Xem tất cả tin tức</a>
+                  </li>
+                  <li className="rd-nav-item"><a className="rd-nav-link" href='/admin'>Admin Page</a>
                   </li>
                 </ul>
               </div>

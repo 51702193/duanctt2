@@ -1,9 +1,10 @@
 
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Button, Select, Upload, message } from 'antd';
 import { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { callDistricts, callProvinces, callStreets, callWards } from 'redux/actions/postNews'
 import { getDistrictsPostNews, getProvincesPostNews, getStreetsPostNews, getWardsPostNews } from 'redux/selectors'
+import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
 
 import './styles.scss'
 const { Option } = Select;
@@ -53,7 +54,7 @@ const PostNews = ({ BE_API_DEFAULT_ROUTE }) => {
     }
 
     const onFinish = (values) => {
-        console.log(`${BE_API_DEFAULT_ROUTE}/tintuc`)
+        values.information1.images = values.information1.file.fileList.map(f => f.xhr.response).join(',');
         fetch(`${BE_API_DEFAULT_ROUTE}/tintuc`, {
             method: 'POST',
             headers: {
@@ -64,7 +65,27 @@ const PostNews = ({ BE_API_DEFAULT_ROUTE }) => {
         })
     };
 
-   
+    const draggerProps = {
+        name: 'file',
+        multiple: true,
+        action: `${BE_API_DEFAULT_ROUTE}/file/upload`,
+        beforeUpload: file => {
+            const fileType = ['image/png', 'image/jpeg', "image/png"];
+            if (['image/png', 'image/jpeg', "image/png"].includes(file.type)) {
+                message.error(`please using PNG, jpg, jpeg file`);
+            }
+            return fileType.includes(file.type) ? true : Upload.LIST_IGNORE;
+        },
+        onChange(info) {
+            const { status } = info.file;
+            if (status === 'done') {
+                info.file.fileName = info.file.xhr.response;
+                message.success(`${info.file.name} file uploaded successfully.`);
+            } else if (status === 'error') {
+                message.error(`${info.file.name} file upload failed.`);
+            }
+        }
+    };
 
     return (
         <Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
@@ -125,6 +146,15 @@ const PostNews = ({ BE_API_DEFAULT_ROUTE }) => {
                     </Form.Item>
                     <Form.Item name={['information1', 'mota']} label="Mô tả" rules={[{ required: true }]}>
                         <Input.TextArea />
+                    </Form.Item>
+                    <Form.Item name={['information1', 'file']} label="Hình Ảnh">
+                        <Upload.Dragger {...draggerProps}>
+                            <p className="ant-upload-drag-icon">
+                                <InboxOutlined />
+                            </p>
+                            <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                            <p className="ant-upload-hint">Support for a single or bulk upload.</p>
+                        </Upload.Dragger>
                     </Form.Item>
 
                 </div>
