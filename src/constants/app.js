@@ -3,6 +3,6 @@ const BE_API_ROUTE = {
     "heroku": "https://duancntt2-be.herokuapp.com/api/v1"
 }
 
-const BE_API_DEFAULT_ROUTE = BE_API_ROUTE.local;
+const BE_API_DEFAULT_ROUTE = BE_API_ROUTE.heroku;
 
 export { BE_API_DEFAULT_ROUTE };
