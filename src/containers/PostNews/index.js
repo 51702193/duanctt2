@@ -6,6 +6,8 @@ import { callDistricts, callProvinces, callStreets, callWards } from 'redux/acti
 import { getDistrictsPostNews, getProvincesPostNews, getStreetsPostNews, getWardsPostNews } from 'redux/selectors'
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
 
+import { getUserOauth2 } from 'redux/selectors'
+
 import './styles.scss'
 const { Option } = Select;
 
@@ -25,7 +27,6 @@ const validateMessages = {
         range: '${label} must be between ${min} and ${max}',
     },
 };
-/* eslint-enable no-template-curly-in-string */
 
 const PostNews = ({ BE_API_DEFAULT_ROUTE }) => {
     const dispatch = useDispatch()
@@ -34,6 +35,7 @@ const PostNews = ({ BE_API_DEFAULT_ROUTE }) => {
         dispatch(callProvinces())
     }, [])
 
+    const user = useSelector(getUserOauth2);
     const districts = useSelector(getDistrictsPostNews);
     const provinces = useSelector(getProvincesPostNews);
     const streets = useSelector(getStreetsPostNews);
@@ -41,6 +43,10 @@ const PostNews = ({ BE_API_DEFAULT_ROUTE }) => {
 
     const [curPorvince, setCurProvice] = useState(null);
     const [curDistrict, setCurDistrict] = useState(null);
+
+    if (!user) {
+        return <>Please Login First</>
+    }
 
     const handleSetProvince = provice => {
         setCurProvice(provice)
@@ -54,6 +60,7 @@ const PostNews = ({ BE_API_DEFAULT_ROUTE }) => {
     }
 
     const onFinish = (values) => {
+        values.information1.accountEmail = user.ct.Mt;
         values.information1.images = values.information1.file.fileList.map(f => f.xhr.response).join(',');
         fetch(`${BE_API_DEFAULT_ROUTE}/tintuc`, {
             method: 'POST',
@@ -62,7 +69,13 @@ const PostNews = ({ BE_API_DEFAULT_ROUTE }) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(values.information1)
-        })
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                window.location.replace(`view-details/${responseJson.id}`);
+            })
+            .catch((error) => {
+                message.error(error);
+            })
     };
 
     const draggerProps = {
@@ -71,7 +84,7 @@ const PostNews = ({ BE_API_DEFAULT_ROUTE }) => {
         action: `${BE_API_DEFAULT_ROUTE}/file/upload`,
         beforeUpload: file => {
             const fileType = ['image/png', 'image/jpeg', "image/png"];
-            if (['image/png', 'image/jpeg', "image/png"].includes(file.type)) {
+            if (!['image/png', 'image/jpeg', "image/png"].includes(file.type)) {
                 message.error(`please using PNG, jpg, jpeg file`);
             }
             return fileType.includes(file.type) ? true : Upload.LIST_IGNORE;
@@ -147,7 +160,7 @@ const PostNews = ({ BE_API_DEFAULT_ROUTE }) => {
                     <Form.Item name={['information1', 'mota']} label="Mô tả" rules={[{ required: true }]}>
                         <Input.TextArea />
                     </Form.Item>
-                    <Form.Item name={['information1', 'file']} label="Hình Ảnh">
+                    <Form.Item name={['information1', 'file']} label="Hình Ảnh" rules={[{ required: true }]}>
                         <Upload.Dragger {...draggerProps}>
                             <p className="ant-upload-drag-icon">
                                 <InboxOutlined />
@@ -158,62 +171,7 @@ const PostNews = ({ BE_API_DEFAULT_ROUTE }) => {
                     </Form.Item>
 
                 </div>
-                {/* <div className="content">
-                    <Form.Item name={['information1', 'tieu-de']} label="Tiêu Đề" rules={[{ required: true }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name={['information1', 'hinh-thuc']} label="Hình Thức" rules={[{ required: true }]}>
-                        <Select>
-                            <Option value="dummy1">dummy1</Option>
-                            <Option value="dummy2">dummy2</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item name={['information1', 'loai']} label="Loại" rules={[{ required: true }]}>
-                        <Select>
-                            <Option value="dummy1">dummy1</Option>
-                            <Option value="dummy2">dummy2</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item name={['information1', 'tinh-tp']} label="Tỉnh/Thành Phố" rules={[{ required: true }]}>
-                        <Select>
-                            <Option value="dummy1">dummy1</Option>
-                            <Option value="dummy2">dummy2</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item name={['information1', 'quan-huyen']} label="Quận/Huyện" rules={[{ required: true }]}>
-                        <Select>
-                            <Option value="dummy1">dummy1</Option>
-                            <Option value="dummy2">dummy2</Option>
-                        </Select>
-                    </Form.Item>
-                </div> */}
             </div>
-
-            {/* <div className="dangtin__container">
-                <div className="title">
-                    Thông tin dự án
-                </div>
-                <div className="content">
-                    <Form.Item name={['information-2', 'ten-du-an']} label="Tên Dự Án" rules={[{ required: true }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name={['information-2', 'dien-tich']} label="Diện Tích" rules={[{ type: 'number', min: 0 }]}>
-                        <InputNumber />
-                    </Form.Item>
-                    <Form.Item name={['information-2', 'don-vi']} label="Đơn vị" rules={[{ required: true }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name={['information-2', 'gia']} label="Giá (VND)" rules={[{ required: true }]}>
-                        <InputNumber />
-                    </Form.Item>
-                    <Form.Item name={['information-2', 'dia-chi-chi-tiet']} label="Địa Chỉ Chi Tiết" rules={[{ required: true }]}>
-                        <Input.TextArea />
-                    </Form.Item>
-                    <Form.Item name={['information-2', 'thong-tin-mo-ta']} label="Thông Tin Mô Tả" rules={[{ required: true }]}>
-                        <Input.TextArea />
-                    </Form.Item>
-                </div>
-            </div> */}
 
             <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 4 }}>
                 <Button type="primary" htmlType="submit">

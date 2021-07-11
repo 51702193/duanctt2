@@ -1,7 +1,7 @@
 import { Carousel } from 'antd';
 import React from 'react'
 import useFetch from "react-fetch-hook";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 import { List, Avatar, Space } from 'antd';
 import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
@@ -9,10 +9,20 @@ import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
 
 import './styles.scss';
 
-const ViewAll = ({ BE_API_DEFAULT_ROUTE }) => {
-    let { id } = useParams();
+const SearchPage = ({ BE_API_DEFAULT_ROUTE }) => {
+    function useQuery() {
+        return new URLSearchParams(useLocation().search);
+    }
+    let query = useQuery();
+    const province = query.get("province")
+    const district = query.get("district")
+    const ward = query.get("ward")
+    const street = query.get("street")
+    const user = query.get("user")
+    //let { id } = useParams();
     // const { isLoading, data } = useFetch(`${BE_API_DEFAULT_ROUTE}/tintuc/pagination/${id}`);
-    const { isLoading, data } = useFetch(`${BE_API_DEFAULT_ROUTE}/tintuc`);
+
+    const { isLoading, data } = useFetch(`${BE_API_DEFAULT_ROUTE}/tintuc/search?${province ? `province=${province}` : ""}&${district ? `district=${district}` : ""}&${ward ? `ward=${ward}` : ""}&${street ? `street=${street}` : ""}&${user ? `user=${user}` : ""}`);
     if (isLoading) {
         return <>Loading</>;
     }
@@ -74,4 +84,4 @@ const ViewAll = ({ BE_API_DEFAULT_ROUTE }) => {
     );
 }
 
-export default ViewAll;
+export default SearchPage;

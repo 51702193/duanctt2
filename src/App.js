@@ -5,7 +5,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
+  Redirect,
+  useLocation
 } from "react-router-dom";
 
 import "antd/dist/antd.css";
@@ -20,32 +21,29 @@ import PostNews from 'containers/PostNews';
 import ViewDetails from 'containers/ViewDetails';
 import ViewAll from 'containers/ViewAll';
 import AdminPage from 'containers/AdminPage';
+import SearchPage from 'containers/SearchPage';
 
 import PageHeader from 'components/PageHeader';
 import { GoogleAuthProvider, useGoogleAuth } from 'components/GoogleAuth';
 
 import { BE_API_DEFAULT_ROUTE } from 'constants/app';
 
-
-
 function AppContainer() {
   const dispatch = useDispatch()
   const appError = useSelector(getAppError)
   const googleAuth = useGoogleAuth();
 
-  /*fetch(`${BE_API_DEFAULT_ROUTE.local}/user/authenticate`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ IdToken: googleAuth?.googleUser?.tokenId })
-  }).then(response => response.json())
-    .then(data => console.log('token invoke', data));*/
-
-
   useEffect(() => {
     dispatch(userLogin(googleAuth.googleUser))
+  //   fetch(`${BE_API_DEFAULT_ROUTE}/user/authenticate`, {
+  //   method: 'POST',
+  //   headers: {
+  //     'Accept': 'application/json',
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify({ IdToken: googleAuth?.googleUser?.tokenId })
+  // }).then(response => response.json())
+  //   .then(data => console.log('token invoke', data));
   }, [googleAuth]);
 
   return (<>
@@ -69,6 +67,15 @@ function AppContainer() {
         </Route>
         <Route path="/admin">
           <AdminPage BE_API_DEFAULT_ROUTE={BE_API_DEFAULT_ROUTE} />
+        </Route>
+        <Route path="/search">
+          <SearchPage
+            BE_API_DEFAULT_ROUTE={BE_API_DEFAULT_ROUTE}
+            // province={query.get("province")}
+            // district={query.get("district")}
+            // ward={query.get("ward")}
+            // street={query.get("street")}
+          />
         </Route>
       </Switch>
     </Router>

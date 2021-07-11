@@ -1,40 +1,42 @@
-import { Carousel } from 'antd';
+import { Button } from 'antd';
 import React from 'react'
 import useFetch from "react-fetch-hook";
 import { useParams } from "react-router-dom";
 
-import { List, Avatar, Space } from 'antd';
+import { useSelector } from 'react-redux'
 
+import { getUserOauth2 } from 'redux/selectors'
+
+import { List, Avatar, Space } from 'antd';
 
 import './styles.scss';
 
-const ViewDetails = ({ BE_API_DEFAULT_ROUTE }) => {
-    let { id } = useParams();
+const AdminPage = ({ BE_API_DEFAULT_ROUTE }) => {
+    //let { id } = useParams();
     // const { isLoading, data } = useFetch(`${BE_API_DEFAULT_ROUTE}/tintuc/pagination/${id}`);
-    const { isLoading, data } = useFetch(`${BE_API_DEFAULT_ROUTE}/tintuc`);
+    const { isLoading, data } = useFetch(`${BE_API_DEFAULT_ROUTE}/tintuc/admin`);
+
+    //const user = useSelector(getUserOauth2)
+    // if (user.ct.Mt !== "vistakeldeo@gmail.com") {
+    //     return <>Access Denied</>;
+    // }
+
     if (isLoading) {
         return <>Loading</>;
     }
     if (!data) {
         return <>Currently No Data Or Server Error</>;
     }
-    console.log("🚀 ~ file: index.js ~ line 19 ~ ViewDetails ~ data", data)
 
     const listData = data.map(d => ({
         id: d.id,
         href: `/view-details/${d.id}`,
         title: d.tenduan,
+        type: d.type,
         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        description: `Đăng bởi: Admin - ${new Date(d.created_date).toLocaleDateString()}`,
-        content: d.mota.substring(0, 500) + "..."
+        description: `Đăng bởi: ${d.accountEmail} - ${new Date(d.created_date).toLocaleDateString()}`,
+        content: d.mota.length > 500 ? d.mota.substring(0, 500) + "..." : d.mota
     }))
-
-    const IconText = ({ icon, text }) => (
-        <Space>
-            {React.createElement(icon)}
-            {text}
-        </Space>
-    );
 
     return (
         <List
@@ -48,8 +50,8 @@ const ViewDetails = ({ BE_API_DEFAULT_ROUTE }) => {
                 <List.Item
                     key={item.id}
                     actions={[
-                        <a key="list-view" href={item.href}>view</a>,
-                        <a key="list-approve" href={"."} onClick={() => {
+                        <Button key="list-view" href={item.href}>view</Button>,
+                        <Button key="list-approve" disabled={item.type === 1} href={item.href} onClick={() => {
                             fetch(`${BE_API_DEFAULT_ROUTE}/tintuc/approve/${item.id}`, {
                                 method: 'POST',
                                 headers: {
@@ -57,8 +59,8 @@ const ViewDetails = ({ BE_API_DEFAULT_ROUTE }) => {
                                     'Content-Type': 'application/json',
                                 }
                             })
-                        }}>approve</a>,
-                        <a key="list-reject" href={"."} onClick={() => {
+                        }}>approve</Button>,
+                        <Button key="list-reject" disabled={item.type === -1} href={item.href} onClick={() => {
                             fetch(`${BE_API_DEFAULT_ROUTE}/tintuc/reject/${item.id}`, {
                                 method: 'POST',
                                 headers: {
@@ -66,7 +68,7 @@ const ViewDetails = ({ BE_API_DEFAULT_ROUTE }) => {
                                     'Content-Type': 'application/json',
                                 }
                             })
-                        }}>reject</a>
+                        }}>reject</Button>
                     ]}
                 >
                     <List.Item.Meta
@@ -82,4 +84,4 @@ const ViewDetails = ({ BE_API_DEFAULT_ROUTE }) => {
     );
 }
 
-export default ViewDetails;
+export default AdminPage;

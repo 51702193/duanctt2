@@ -29,7 +29,11 @@ function PageHeader() {
                 <button className="rd-navbar-collapse-toggle rd-navbar-fixed-element-1 toggle-original" data-rd-navbar-toggle="#rd-navbar-collapse-content-1"><span></span></button>
                 <div className="rd-navbar-collapse-content toggle-original-elements" id="rd-navbar-collapse-content-1">
                   <article className="unit align-items-center">
-                    <div className="unit-left"><span className="icon novi-icon icon-md icon-modern mdi mdi-phone"></span></div>
+                    <div className="unit-left" style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}><span className="icon novi-icon icon-md icon-modern mdi mdi-phone"></span></div>
                     <div className="unit-body">
                       <ul className="list-0">
                         <li><a className="link-default">1-800-1234-567</a></li>
@@ -37,11 +41,11 @@ function PageHeader() {
                       </ul>
                     </div>
                   </article>
-                  <article className="unit align-items-center">
+                  {/* <article className="unit align-items-center">
                     <div className="unit-left"><span className="icon novi-icon icon-md icon-modern mdi mdi-map-marker"></span></div>
                     <div className="unit-body"><a className="link-default" >2130 Fulton Street <br></br> San Diego, CA 94117-1080</a></div>
-                  </article>
-                  {user?.accessToken ? <><div>Welcome, {user.ct.Ue}</div> <GoogleSignInButton /></> : <GoogleSignInButton />}
+                  </article> */}
+                  {user?.accessToken ? <><a href={`/search?user=${user.ct.Mt}`}>Welcome, {user.ct.Ue}</a> <GoogleSignInButton /></> : <GoogleSignInButton />}
                 </div>
               </div>
             </div>
