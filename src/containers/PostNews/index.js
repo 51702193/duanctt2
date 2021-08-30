@@ -60,7 +60,7 @@ const PostNews = ({ BE_API_DEFAULT_ROUTE }) => {
     }
 
     const onFinish = (values) => {
-        values.information1.accountEmail = user.ct.Mt;
+        values.information1.accountEmail = user.Vs.Pe;
         values.information1.images = values.information1.file.fileList.map(f => f.xhr.response).join(',');
         fetch(`${BE_API_DEFAULT_ROUTE}/tintuc`, {
             method: 'POST',
