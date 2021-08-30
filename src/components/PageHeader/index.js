@@ -45,7 +45,7 @@ function PageHeader() {
                     <div className="unit-left"><span className="icon novi-icon icon-md icon-modern mdi mdi-map-marker"></span></div>
                     <div className="unit-body"><a className="link-default" >2130 Fulton Street <br></br> San Diego, CA 94117-1080</a></div>
                   </article> */}
-                  {user?.accessToken ? <><a href={`/search?user=${user.ct.Mt}`}>Welcome, {user.ct.Ue}</a> <GoogleSignInButton /></> : <GoogleSignInButton />}
+                  {user?.accessToken ? <><a href={`/search?user=${user.Vs.Pe}`}>Welcome, {user.Vs.Pe}</a> <GoogleSignInButton /></> : <GoogleSignInButton />}
                 </div>
               </div>
             </div>
@@ -68,10 +68,10 @@ function PageHeader() {
           </div>
         </nav>
       </div>
-      <Modal visible={false} onOk={() => { }} onCancel={() => { }}>
+      {/* <Modal visible={false} onOk={() => { }} onCancel={() => { }}>
         <div>Lần đầu đăng nhập</div>
         <div>Xin hãy đăng ký thành viên</div>
-      </Modal>
+      </Modal> */}
     </>
   );
 }
