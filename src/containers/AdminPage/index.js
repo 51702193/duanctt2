@@ -1,7 +1,7 @@
 import { Button } from 'antd';
 import React from 'react'
 import useFetch from "react-fetch-hook";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import { useSelector } from 'react-redux'
 
@@ -12,14 +12,15 @@ import { List, Avatar, Space } from 'antd';
 import './styles.scss';
 
 const AdminPage = ({ BE_API_DEFAULT_ROUTE }) => {
+    let history = useHistory();
     //let { id } = useParams();
     // const { isLoading, data } = useFetch(`${BE_API_DEFAULT_ROUTE}/tintuc/pagination/${id}`);
     const { isLoading, data } = useFetch(`${BE_API_DEFAULT_ROUTE}/tintuc/admin`);
 
-    //const user = useSelector(getUserOauth2)
-    // if (user.ct.Mt !== "vistakeldeo@gmail.com") {
-    //     return <>Access Denied</>;
-    // }
+    const user = useSelector(getUserOauth2)
+    if (user.Vs.Gt !== "vistakeldeo@gmail.com") {
+        return <>Access Denied</>;
+    }
 
     if (isLoading) {
         return <>Loading</>;
@@ -51,23 +52,27 @@ const AdminPage = ({ BE_API_DEFAULT_ROUTE }) => {
                     key={item.id}
                     actions={[
                         <Button key="list-view" href={item.href}>view</Button>,
-                        <Button key="list-approve" disabled={item.type === 1} href={item.href} onClick={() => {
+                        <Button key="list-approve" disabled={item.type === 1} onClick={() => {
                             fetch(`${BE_API_DEFAULT_ROUTE}/tintuc/approve/${item.id}`, {
                                 method: 'POST',
                                 headers: {
                                     'Accept': 'application/json',
                                     'Content-Type': 'application/json',
                                 }
-                            })
+                            }).then(
+                                () => { history.push(item.href) }
+                            )
                         }}>approve</Button>,
-                        <Button key="list-reject" disabled={item.type === -1} href={item.href} onClick={() => {
+                        <Button key="list-reject" disabled={item.type === -1} onClick={() => {
                             fetch(`${BE_API_DEFAULT_ROUTE}/tintuc/reject/${item.id}`, {
                                 method: 'POST',
                                 headers: {
                                     'Accept': 'application/json',
                                     'Content-Type': 'application/json',
                                 }
-                            })
+                            }).then(
+                                () => { history.go(0) }
+                            )
                         }}>reject</Button>
                     ]}
                 >
