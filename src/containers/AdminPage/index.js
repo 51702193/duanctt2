@@ -17,10 +17,10 @@ const AdminPage = ({ BE_API_DEFAULT_ROUTE }) => {
     // const { isLoading, data } = useFetch(`${BE_API_DEFAULT_ROUTE}/tintuc/pagination/${id}`);
     const { isLoading, data } = useFetch(`${BE_API_DEFAULT_ROUTE}/tintuc/admin`);
 
-    const user = useSelector(getUserOauth2)
-    if (user.Vs.Gt !== "vistakeldeo@gmail.com") {
-        return <>Access Denied</>;
-    }
+    // const user = useSelector(getUserOauth2)
+    // if (user?.Vs?.Gt !== "vistakeldeo@gmail.com") {
+    //     return <>Access Denied</>;
+    // }
 
     if (isLoading) {
         return <>Loading</>;
